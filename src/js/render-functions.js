@@ -1,28 +1,50 @@
 import SimpleLightbox from "simplelightbox";
+
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-export const listOfPhotos = document.querySelector('.photos');
+export const galleryImg = document.querySelector(".gallery");
+export let htmlListOfGallery = "";
 
-export const renderingPhotos = data => {
-    data.forEach(element => {
+export function createMarkup(data) {
+    htmlListOfGallery = "";
+    galleryImg.innerHTML = htmlListOfGallery;
+  
+    for (let i = 0; i < data.hits.length; i++) {
+        htmlListOfGallery += `<li class="gallery-item">
+         <a class="gallery-link" href="${data.hits[i].largeImageURL}">
+         <img class="gallery-image"
+                src="${data.hits[i].webformatURL}"
+                alt="${data.hits[i].tags}"/> </a>
+        <ul class="stat">
+          <li class="detals-stat">
+           <h2 class="description">Likes</h2>
+           <p class="stat-value">${data.hits[i].likes}</p>
+          </li>
+          <li class="detals-stat">
+           <h2 class="description">Views</h2>
+           <p class="stat-value">${data.hits[i].views}</p>
+          </li>
+          <li class="detals-stat">
+           <h2 class="description">Comments</h2>
+           <p class="stat-value">${data.hits[i].comments}</p>
+          </li>
+          <li class="detals-stat">
+           <h2 class="description">Downloads</h2>
+           <p class="stat-value">${data.hits[i].downloads}</p>
+          </li>
+        </ul>
+        </li>`
+    }
 
-        const murkup = `<li class="photo">
-            <a href="${element.largeImageURL}" data-lightbox="photos">
-                <img src="${element.webformatURL}" alt="${element.tags}" title="${element.tags}" class="img">
-            </a>
-            <ul class="list">
-                <li class="item"><h2>Likes <span>${element.likes}</span></h2></li>
-                <li class="item"><h2>Views <span>${element.views}</span></h2></li>
-                <li class="item"><h2>Comments <span>${element.comments}</span></h2></li>
-                <li class="item"><h2>Downloads <span>${element.downloads}</span></h2></li>
-            </ul>
-        </li>`;
+    galleryImg.innerHTML = htmlListOfGallery;
+  
+    lightbox.refresh();
+  
+}
 
-        listOfPhotos.insertAdjacentHTML('beforeend', murkup);
-
+    const lightbox = new SimpleLightbox('.gallery-item a', {
+            captionsData: "alt",
+            captionPosition: "bottom",
+            captionDelay: 250,
     });
 
-    const lightbox = new SimpleLightbox('.photos a', {});
-
-    lightbox.refresh();
-}
